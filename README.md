@@ -29,7 +29,9 @@ Compile files.
 ```
 
 Start server
+```bash
 > server:start().
+```
 
 Open other terminal in your path project.
 Start and join client.
