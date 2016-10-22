@@ -15,33 +15,37 @@ You need to enter the name of your machine to the node in `client.erl` file.
 Server = {server_chat, 'server@{MACHINE_NAME}'}
 ```
 
+Go to yout path project, and start node server
+
+```bash
+$ erl -sname server
+```
+
 Compile files.
 
 ```bash
-$ c(server).
-$ c(client).
+> c(server).
+> c(client).
 ```
 
 Start server
+> server:start().
+
+Open other terminal in your path project.
+Start and join client.
 
 ```bash
-$ server:start().
-```
-
-Open other terminal in your path project and join client.
-
-```bash
-C = client:join({YOUR_NICK_NAME}).
+$ erl -sname client
+> C = client:join({YOUR_NICK_NAME}).
 ```
 
 To send message
 
 ```bash
-C ! {send, "Hello world"}.
+> C ! {send, "Hello world"}.
 ```
 
 ## Enjoy
-
 
 
 ## Authors

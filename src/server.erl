@@ -23,13 +23,13 @@ chat(Users) ->
     {Pid, send, Message} ->
       From = find(Pid, Users),
       io:format("~s: ~s~n", [From, Message]),
-      broadcast(new_msg, Users, {From, Message}),
+      broadcast(new_message, Users, {From, Message}),
       chat(Users);
     {'EXIT', Pid, _} ->
       Nick = find(Pid, Users),
       io:format("cliente: ~s saiu~n", [Nick]),
       broadcast(disconnect, Users, {Nick}),
-      chat(remove({Nick,Pid}, Users));
+      chat(remove({Nick, Pid}, Users));
     _ ->
       chat(Users)
 
@@ -42,19 +42,15 @@ find(From, [_ | T]) ->
 
 remove(From, Users) ->
   [T || T <- Users, T /= From].
-  %%lists:filter(fun({_, Pid}) -> Pid =/= From end, Users).
 
 broadcast(join, Users, {Nick}) ->
   broadcast({info, Nick ++ " conectado."}, Users);
-broadcast(new_msg, Users, {Nick, Message}) ->
-  broadcast({new_msg, Nick, Message}, Users);
+broadcast(new_message, Users, {Nick, Message}) ->
+  broadcast({new_message, Nick, Message}, Users);
 broadcast(disconnect, Users, {Nick}) ->
   broadcast({info, Nick ++ " saiu."}, Users).
 
-%%broadcast(Message, Users) ->
-  %%lists:foreach(fun({_, Pid}) -> Pid ! Message end, Users).
-
-broadcast(Message, [{_,Pid}| Users]) ->
+broadcast(Message, [{_, Pid} | Users]) ->
   Pid ! Message,
   broadcast(Message, Users);
 broadcast(_, []) ->

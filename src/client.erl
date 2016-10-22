@@ -18,7 +18,7 @@ chat(Server, Nick) ->
     {send, Message} ->
       Server ! {self(), send, Message},
       chat(Server, Nick);
-    {new_msg, From, Message} ->
+    {new_message, From, Message} ->
       io:format("[~s] - ~s disse: ~s~n", [Nick, From, Message]),
       chat(Server, Nick);
     {info, Message} ->
@@ -28,10 +28,6 @@ chat(Server, Nick) ->
       io:format("[~s] - Erro - Comando inválido.~n", [Nick]),
       chat(Server, Nick)
   end.
-
-%send() ->
-%  {ok, [Message]} = io:fread("Digite a mensagem: ", "~s"),
-%  {server_chat, 'server@MacBook-Pro-de-Vinicius'} ! {self(), send, Message}.
 
 join(Nick) ->
   Server = {server_chat, 'server@MacBook-Pro-de-Vinicius'},
