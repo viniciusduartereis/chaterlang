@@ -37,7 +37,7 @@ Open other terminal in your path project and join client.
 
 ```bash
 $ erl -sname client
-> C = client:join({YOUR_NICK_NAME}).
+> C = client:join({NICK_NAME}).
 ```
 
 To send message
