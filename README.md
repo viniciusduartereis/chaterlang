@@ -8,31 +8,30 @@ You need to install erlang
 
 ## Getting Started
 
-you need to enter the name of your machine to the node in client.erl
+1. You need to enter the name of your machine to the node in `client.erl` file.
 
-```
 `Server = {server_chat, 'server@{MACHINE_NAME}'}`
 
-Compile files.
+2. Compile files.
 
 `c(server).`
 `c(client).`
 
-Start server
+3. Start server
 
 `server:start().`
 
-Open other terminal in your path project and join client.
+4. Open other terminal in your path project and join client.
 
 `C = client:join({YOUR_NICK_NAME}).`
 
-To send message
+5. To send message
 
 `C ! {send, "Hello world"}.`
 
 ## Enjoy
 
-```
+
 
 ## Authors
 
