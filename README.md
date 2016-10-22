@@ -1,7 +1,7 @@
 Chat Erlang
 ==========
 
-Simple chat erlang.
+Simple erlang chat for messages between nodes.
 
 ### Prerequisites
 
@@ -46,8 +46,8 @@ C ! {send, "Hello world"}.
 
 ## Authors
 
-* **Vinícius Duarte Reis**
+* Vinícius Duarte Reis
 
 ## Acknowledgments
 
-* Teacher Rodrigo
+* **Teacher Rodrigo**
