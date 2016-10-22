@@ -17,7 +17,7 @@ chat(Users) ->
   receive
     {Pid, join, Nick} ->
       link(Pid),
-      io:format("cliente: ~s conectado~n", [Nick]),
+      io:format("client: ~s connected.~n", [Nick]),
       broadcast(join, Users, {Nick}),
       chat([{Nick, Pid} | Users]);
     {Pid, send, Message} ->
@@ -27,7 +27,7 @@ chat(Users) ->
       chat(Users);
     {'EXIT', Pid, _} ->
       Nick = find(Pid, Users),
-      io:format("cliente: ~s saiu~n", [Nick]),
+      io:format("client: ~s left.~n", [Nick]),
       broadcast(disconnect, Users, {Nick}),
       chat(remove({Nick, Pid}, Users));
     _ ->
@@ -44,11 +44,11 @@ remove(From, Users) ->
   [T || T <- Users, T /= From].
 
 broadcast(join, Users, {Nick}) ->
-  broadcast({info, Nick ++ " conectado."}, Users);
+  broadcast({info, Nick ++ " connected."}, Users);
 broadcast(new_message, Users, {Nick, Message}) ->
   broadcast({new_message, Nick, Message}, Users);
 broadcast(disconnect, Users, {Nick}) ->
-  broadcast({info, Nick ++ " saiu."}, Users).
+  broadcast({info, Nick ++ " left."}, Users).
 
 broadcast(Message, [{_, Pid} | Users]) ->
   Pid ! Message,

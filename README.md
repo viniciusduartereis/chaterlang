@@ -33,8 +33,7 @@ Start server
 > server:start().
 ```
 
-Open other terminal in your path project.
-Start and join client.
+Open other terminal in your path project and join client.
 
 ```bash
 $ erl -sname client

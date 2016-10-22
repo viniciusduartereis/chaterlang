@@ -19,13 +19,13 @@ chat(Server, Nick) ->
       Server ! {self(), send, Message},
       chat(Server, Nick);
     {new_message, From, Message} ->
-      io:format("[~s] - ~s disse: ~s~n", [Nick, From, Message]),
+      io:format("[~s] - ~s said: ~s~n", [Nick, From, Message]),
       chat(Server, Nick);
     {info, Message} ->
       io:format("[~s] - ~s~n", [Nick, Message]),
       chat(Server, Nick);
     _ ->
-      io:format("[~s] - Erro - Comando inválido.~n", [Nick]),
+      io:format("[~s] - Error - invalid command.~n", [Nick]),
       chat(Server, Nick)
   end.
 
