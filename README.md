@@ -50,4 +50,4 @@ C ! {send, "Hello world"}.
 
 ## Acknowledgments
 
-* **Teacher Rodrigo**
+* **Teacher Rodrigo Freitas**
