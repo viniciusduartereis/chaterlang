@@ -12,7 +12,7 @@ You need to install [erlang](http://www.erlang.org).
 You need to enter the name of your machine to the node in `client.erl` file.
 
 ```erlang
-Server = {server_chat, 'server@{MACHINE_NAME}'}
+Server = {server_chat, 'server@{MACHINE_NAME}'},
 ```
 
 Go to yout path project, and start node server
