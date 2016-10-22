@@ -1,33 +1,44 @@
-## Chat Erlang
+Chat Erlang
+==========
 
 Simple chat erlang.
 
 ### Prerequisites
 
-You need to install erlang
+You need to install [erlang](http://www.erlang.org).
 
 ## Getting Started
 
-1. You need to enter the name of your machine to the node in `client.erl` file.
+You need to enter the name of your machine to the node in `client.erl` file.
 
-`Server = {server_chat, 'server@{MACHINE_NAME}'}`
+```erlang
+Server = {server_chat, 'server@{MACHINE_NAME}'}
+```
 
-2. Compile files.
+Compile files.
 
-`c(server).`
-`c(client).`
+```bash
+$ c(server).
+$ c(client).
+```
 
-3. Start server
+Start server
 
-`server:start().`
+```bash
+$ server:start().
+```
 
-4. Open other terminal in your path project and join client.
+Open other terminal in your path project and join client.
 
-`C = client:join({YOUR_NICK_NAME}).`
+```bash
+C = client:join({YOUR_NICK_NAME}).
+```
 
-5. To send message
+To send message
 
-`C ! {send, "Hello world"}.`
+```bash
+C ! {send, "Hello world"}.
+```bash
 
 ## Enjoy
 
