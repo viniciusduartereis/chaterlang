@@ -38,7 +38,7 @@ To send message
 
 ```bash
 C ! {send, "Hello world"}.
-```bash
+```
 
 ## Enjoy
 
