@@ -3,13 +3,14 @@ Chat Erlang
 
 Simple erlang chat for messages between nodes.
 
+## Getting Started
+
+
 ### Prerequisites
 
 You need to install [erlang](http://www.erlang.org).
 
-## Getting Started
-
-You need to enter the name of your machine to the node in `client.erl` file.
+Enter the name of your machine to the node in `client.erl` file.
 
 ```erlang
 Server = {server_chat, 'server@{MACHINE_NAME}'},
