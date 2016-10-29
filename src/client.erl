@@ -7,11 +7,21 @@
 %%% Created : 22. out 2016 16:13
 %%%-------------------------------------------------------------------
 -module(client).
--author("Vinicius").
-
+-author("Vinicius <viniciusduartereis@gmail.com>").
 
 %% API
--compile(export_all).
+-export([join/1,chat/2]).
+%%-compile(export_all).
+
+-include("user.hrl").
+-include("message.hrl").
+
+
+join(Nick) ->
+  Server = {server_chat, 'server@MacBook-Pro-de-Vinicius'},
+  Pid = spawn(client, chat, [Server, Nick]),
+  Server ! {Pid, join, Nick},
+  Pid.
 
 chat(Server, Nick) ->
   receive
@@ -29,10 +39,6 @@ chat(Server, Nick) ->
       chat(Server, Nick)
   end.
 
-join(Nick) ->
-  Server = {server_chat, 'server@MacBook-Pro-de-Vinicius'},
-  Pid = spawn(client, chat, [Server, Nick]),
-  Server ! {Pid, join, Nick},
-  Pid.
+
 
 

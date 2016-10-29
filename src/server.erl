@@ -7,10 +7,19 @@
 %%% Created : 22. out 2016 16:13
 %%%-------------------------------------------------------------------
 -module(server).
--author("Vinicius").
+-author("Vinicius <viniciusduartereis@gmail.com>").
 
 %% API
--compile(export_all).
+-export([start/0,chat/1]).
+%%-compile(export_all).
+
+-include("user.hrl").
+-include("message.hrl").
+
+
+start() ->
+  register(server_chat, spawn(server, chat, [[]])).
+
 
 chat(Users) ->
   process_flag(trap_exit, true),
@@ -56,5 +65,4 @@ broadcast(Message, [{_, Pid} | Users]) ->
 broadcast(_, []) ->
   true.
 
-start() ->
-  register(server_chat, spawn(server, chat, [[]])).
+
