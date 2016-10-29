@@ -9,14 +9,10 @@
 -module(database).
 -author("Vinicius <viniciusduartereis@gmail.com>").
 
--include("user.hrl").
--include("message.hrl").
+-include("chat.hrl").
 
 %% API
 -export([init/0]).
-
--include("user.hrl").
--include("message.hrl").
 
 init()->
   mnesia:create_schema([node()]),

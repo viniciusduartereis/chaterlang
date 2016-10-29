@@ -13,8 +13,7 @@
 -export([join/1,chat/2]).
 %%-compile(export_all).
 
--include("user.hrl").
--include("message.hrl").
+-include("chat.hrl").
 
 
 join(Nick) ->

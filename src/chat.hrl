@@ -10,4 +10,9 @@
 
 -record(message,{nick,type,text,date}).
 -record(message_type,{info,join,new_message}).
+%%-record(user,{nick}).
+-record(user,{nick,messages = []}).
+
+-define(TCP_OPTIONS, [binary, {packet, 0}, {active, false}, {reuseaddr, true}]).
+-define(PORT, 5483).
 

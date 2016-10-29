@@ -13,9 +13,7 @@
 -export([start/0,chat/1]).
 %%-compile(export_all).
 
--include("user.hrl").
--include("message.hrl").
-
+-include("chat.hrl").
 
 start() ->
   register(server_chat, spawn(server, chat, [[]])).
@@ -65,4 +63,18 @@ broadcast(Message, [{_, Pid} | Users]) ->
 broadcast(_, []) ->
   true.
 
+
+
+start1() ->
+  {ok, ServerSocket} = gen_tcp:listen(?PORT, ?TCP_OPTIONS),
+  chat1(ServerSocket, []).
+
+chat1(Server, Users) ->
+  case gen_tcp:accept(Server) of
+    {ok, Client} ->
+      Client ! {join, Client},
+      chat1(Server, Users ++ [Client] );
+    _ ->
+      io:format("\n")
+  end.
 

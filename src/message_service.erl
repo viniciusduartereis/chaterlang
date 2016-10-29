@@ -12,7 +12,7 @@
 %% API
 -export([]).
 
--include("message.hrl").
+-include("chat.hrl").
 
 add(Nick, Text,Type) ->
   F = fun() -> mnesia:write(#message{nick=Nick, text = Text,type = Type, date = calendar:local_time()}) end,
