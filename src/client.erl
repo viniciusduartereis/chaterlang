@@ -19,13 +19,13 @@
 join(Nick) ->
   Server = {server_chat, 'server@MacBook-Pro-de-Vinicius'},
   Pid = spawn(client, chat, [Server, Nick]),
-  Server ! {Pid, join, Nick},
+  Server ! { node(), Pid, join, Nick},
   Pid.
 
 chat(Server, Nick) ->
   receive
     {send, Message} ->
-      Server ! {self(), send, Message},
+      Server ! { node(), self(), send, Message},
       chat(Server, Nick);
     {new_message, From, Message} ->
       io:format("[~s] - ~s said: ~s~n", [Nick, From, Message]),

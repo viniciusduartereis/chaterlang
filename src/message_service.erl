@@ -12,10 +12,18 @@
 %% API
 -export([]).
 
+%% Nó UNICO node() ao entrar
+%% Armazenar as mensagens quando usuario estiver desconectado.
+%% Receber as mensagens pendentes ao entrar
+
 -include("chat.hrl").
+-include_lib("stdlib/include/qlc.hrl").
 
 add(Nick, Text,Type) ->
-  F = fun() -> mnesia:write(#message{nick=Nick, text = Text,type = Type, date = calendar:local_time()}) end,
+  Item = #message{nick=Nick, text = Text,type = Type, date = calendar:local_time()},
+  F = fun() ->
+    mnesia:write(Item)
+      end,
   mnesia:transaction(F).
 
 delete(Nick)->
@@ -29,7 +37,7 @@ find(Nick) ->
       {From, To, T,D}
     end
   ),
-  mnesia:select(mafiapp_services, Match).
+  mnesia:select(message, Match).
 
 find(Type) ->
   Match = ets:fun2ms(
@@ -38,7 +46,7 @@ find(Type) ->
       {From, To, T,D}
     end
   ),
-  mnesia:select(mafiapp_services, Match).
+  mnesia:select(message, Match).
 
 find_by_nick(Nick) ->
   F = fun() -> mnesia:read({message, Nick}) end,
@@ -46,3 +54,12 @@ find_by_nick(Nick) ->
     [] -> undefined;
     [#message{nick = N, text = M,type = T,date = D}] -> {N,M,T,D}
   end.
+
+select_messages()->
+  F = fun() ->
+    Query = qlc:q([X || X <- mnesia:table(message)]),
+    qlc:e(Query)
+      end,
+  {atomic, Val} = mnesia:transaction(F),
+  Val.
+    

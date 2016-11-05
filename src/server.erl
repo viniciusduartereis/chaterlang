@@ -9,6 +9,8 @@
 -module(server).
 -author("Vinicius <viniciusduartereis@gmail.com>").
 
+%%  erl -sname no -run modulo funcao -run init stop -noshell
+
 %% API
 -export([start/0,chat/1]).
 %%-compile(export_all).
@@ -22,30 +24,37 @@ start() ->
 chat(Users) ->
   process_flag(trap_exit, true),
   receive
-    {Pid, join, Nick} ->
+    {Node, Pid, join, Nick} ->
       link(Pid),
       io:format("client: ~s connected.~n", [Nick]),
       broadcast(join, Users, {Nick}),
-      chat([{Nick, Pid} | Users]);
-    {Pid, send, Message} ->
-      From = find(Pid, Users),
-      io:format("~s: ~s~n", [From, Message]),
-      broadcast(new_message, Users, {From, Message}),
+      User = #user{node = Node,pid = Pid ,nick = Nick},
+      chat([User]++ Users);
+      %% ADICIONAR NO BANCO DE DADOS
+    {Node, _, send, Message} ->
+      User = findNode(Node, Users),
+      io:format("~s: ~s~n", [User#user.nick, Message]),
+      broadcast(new_message, Users, {User#user.nick, Message}),
       chat(Users);
     {'EXIT', Pid, _} ->
-      Nick = find(Pid, Users),
-      io:format("client: ~s left.~n", [Nick]),
-      broadcast(disconnect, Users, {Nick}),
-      chat(remove({Nick, Pid}, Users));
+      User = findPid(Pid, Users),
+      io:format("client: ~s left.~n", [User#user.nick]),
+      broadcast(disconnect, Users, {User#user.nick}),
+      chat(remove(User, Users));
     _ ->
       chat(Users)
 
   end.
 
-find(From, [{Nick, Pid} | _]) when From == Pid ->
-  Nick;
-find(From, [_ | T]) ->
-  find(From, T).
+findNode(From, [ User | _]) when From == User#user.node ->
+  User;
+findNode(From, [_ | User]) ->
+  findNode(From, User).
+
+findPid(From, [ User | _]) when From == User#user.pid ->
+  User;
+findPid(From, [_ | User]) ->
+  findPid(From, User).
 
 remove(From, Users) ->
   [T || T <- Users, T /= From].
@@ -57,8 +66,8 @@ broadcast(new_message, Users, {Nick, Message}) ->
 broadcast(disconnect, Users, {Nick}) ->
   broadcast({info, Nick ++ " left."}, Users).
 
-broadcast(Message, [{_, Pid} | Users]) ->
-  Pid ! Message,
+broadcast(Message, [ User | Users ]) ->
+  User#user.pid ! Message,
   broadcast(Message, Users);
 broadcast(_, []) ->
   true.
