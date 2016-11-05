@@ -29,7 +29,7 @@ init()->
   mnesia:delete_table(user),
   mnesia:create_table(user,
     [{attributes, record_info(fields, user)},
-      {index,[#user,[#user.nick]]}]),
+      {index,[#user,[#user.node,#user.pid,#user.nick]]}]),
   %%mnesia:stop(),
   mnesia:wait_for_tables([message,user],20000),
   mnesia:info().

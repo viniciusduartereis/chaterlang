@@ -29,8 +29,9 @@ chat(Users) ->
       io:format("client: ~s connected.~n", [Nick]),
       broadcast(join, Users, {Nick}),
       User = #user{node = Node,pid = Pid ,nick = Nick},
-      chat([User]++ Users);
       %% ADICIONAR NO BANCO DE DADOS
+      chat([User]++ Users);
+
     {Node, _, send, Message} ->
       User = findNode(Node, Users),
       io:format("~s: ~s~n", [User#user.nick, Message]),
