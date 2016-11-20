@@ -18,6 +18,7 @@
 -include("chat.hrl").
 
 start() ->
+  database:init(),
   register(server_chat, spawn(server, chat, [[]])).
 
 
@@ -28,19 +29,25 @@ chat(Users) ->
       link(Pid),
       io:format("client: ~s connected.~n", [Nick]),
       broadcast(join, Users, {Nick}),
-      User = #user{node = Node,pid = Pid ,nick = Nick},
-      %% ADICIONAR NO BANCO DE DADOS
+      User = #user{node = Node,pid = Pid ,nick = Nick, on = true, messages = [] },
+      %% SE ESTIVER JA NO BANCO, RECEBER AS MENSAGENS ARMAZENAS QUANDO OFFLINE E APAGAR AS MENSAGENS
+      user_service:add_record(User),
       chat([User]++ Users);
 
     {Node, _, send, Message} ->
       User = findNode(Node, Users),
       io:format("~s: ~s~n", [User#user.nick, Message]),
       broadcast(new_message, Users, {User#user.nick, Message}),
+      Message = #message{nick=User#user.nick, text = Message,type = new_message, date = calendar:local_time()},
+      %% SE ESTIVER ON == FALSE, ARMAZENAR AS MENSAGENS !!!!!!!!!!
+      message_service:add_record(Message),
       chat(Users);
     {'EXIT', Pid, _} ->
       User = findPid(Pid, Users),
       io:format("client: ~s left.~n", [User#user.nick]),
       broadcast(disconnect, Users, {User#user.nick}),
+      UserAdd = #user{node = User#user.node,pid = User#user.pid ,nick = User#user.nick, on = false, messages = User#user.messages },
+      user_service:add_record(UserAdd),
       chat(remove(User, Users));
     _ ->
       chat(Users)
@@ -74,17 +81,22 @@ broadcast(_, []) ->
   true.
 
 
-
-start1() ->
-  {ok, ServerSocket} = gen_tcp:listen(?PORT, ?TCP_OPTIONS),
-  chat1(ServerSocket, []).
-
-chat1(Server, Users) ->
-  case gen_tcp:accept(Server) of
-    {ok, Client} ->
-      Client ! {join, Client},
-      chat1(Server, Users ++ [Client] );
-    _ ->
-      io:format("\n")
-  end.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%	TCP SOCKET TEST
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% start1() ->
+%   {ok, ServerSocket} = gen_tcp:listen(?PORT, ?TCP_OPTIONS),
+%   chat1(ServerSocket, []).
+% 
+% chat1(Server, Users) ->
+%   case gen_tcp:accept(Server) of
+%     {ok, Client} ->
+%       Client ! {join, Client},
+%       chat1(Server, Users ++ [Client] );
+%     _ ->
+%       io:format("\n")
+%   end.
 

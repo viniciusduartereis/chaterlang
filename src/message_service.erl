@@ -10,7 +10,7 @@
 -author("Vinicius <viniciusduartereis@gmail.com>").
 
 %% API
--export([]).
+-export([add_record/1]).
 
 %% Nó UNICO node() ao entrar
 %% Armazenar as mensagens quando usuario estiver desconectado.
@@ -19,8 +19,15 @@
 -include("chat.hrl").
 -include_lib("stdlib/include/qlc.hrl").
 
-add(Nick, Text,Type) ->
-  Item = #message{nick=Nick, text = Text,type = Type, date = calendar:local_time()},
+add_record(Message) ->
+  F = fun() ->
+    mnesia:write(Message)
+      end,
+  mnesia:transaction(F).
+
+%%calendar:local_time()
+add(Nick, Text,Type, Date) ->
+  Item = #message{nick=Nick, text = Text,type = Type, date = Date},
   F = fun() ->
     mnesia:write(Item)
       end,
@@ -37,7 +44,7 @@ find(Nick) ->
       {From, To, T,D}
     end
   ),
-  mnesia:select(message, Match).
+  mnesia:select(message, Match);
 
 find(Type) ->
   Match = ets:fun2ms(

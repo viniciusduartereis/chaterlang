@@ -22,14 +22,12 @@ init()->
 
   %MESSAGE
   mnesia:delete_table(message),
-  mnesia:create_table(message,
-    [{attributes, record_info(fields, message)},
-      {index, [#message.nick,#message.type]}]),
+  mnesia:create_table(message,[{attributes, record_info(fields, message)}]),
+  %%mnesia:create_table(message,[{attributes, record_info(fields, message)},{index, [#message.nick,#message.type]}]),
   %%USER
   mnesia:delete_table(user),
-  mnesia:create_table(user,
-    [{attributes, record_info(fields, user)},
-      {index,[#user,[#user.node,#user.pid,#user.nick]]}]),
+  mnesia:create_table(user,[{attributes, record_info(fields, user)}]),
+  %%mnesia:create_table(user,[{attributes, record_info(fields, user)},{index,[#user.node, #user.pid, #user.nick]}]),
   %%mnesia:stop(),
   mnesia:wait_for_tables([message,user],20000),
   mnesia:info().
