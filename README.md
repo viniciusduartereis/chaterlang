@@ -16,7 +16,7 @@ Enter the name of your machine to the node in `client.erl` file.
 Server = {server_chat, 'server@{MACHINE_NAME}'},
 ```
 
-Go to yout path project, and start node server
+Go to your path project, and start node server
 
 ```bash
 $ erl -sname server
@@ -53,6 +53,7 @@ To send message
 ## Authors
 
 * Vinícius Duarte Reis
+* Natalia Leticia
 
 ## Acknowledgments
 
