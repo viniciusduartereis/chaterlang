@@ -62,7 +62,7 @@ find_by_nick(Nick) ->
     [#message{nick = N, text = M,type = T,date = D}] -> {N,M,T,D}
   end.
 
-select_messages()->
+select()->
   F = fun() ->
     Query = qlc:q([X || X <- mnesia:table(message)]),
     qlc:e(Query)
