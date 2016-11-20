@@ -17,7 +17,7 @@
 
 
 join(Nick) ->
-  Server = {server_chat, 'server@UNIFIEOLAB'},
+  Server = {server_chat, 'server@MacBook-Pro-de-Vinicius'},
   Pid = spawn(client, chat, [Server, Nick]),
   Server ! { node(), Pid, join, Nick},
   Pid.

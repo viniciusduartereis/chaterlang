@@ -19,9 +19,9 @@
 -include("chat.hrl").
 -include_lib("stdlib/include/qlc.hrl").
 
-add_record(Message) ->
+add_record(M) ->
   F = fun() ->
-    mnesia:write(Message)
+    mnesia:write(M)
       end,
   mnesia:transaction(F).
 
