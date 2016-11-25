@@ -27,9 +27,15 @@ chat(Users) ->
   receive
     {Node, Pid, join, Nick} ->
       link(Pid),
+      User = #user{node = Node,pid = Pid ,nick = Nick, on = true, messages = []},
+      [T | _ ] = user_service:get(User),
+      io:format("select: ~w\n",[T]),
+      io:format("before messages: ~w\n",[User#user.messages]),
+      User#user.messages ++ T#user.messages,
+      io:format("after messages: ~w\n",[User#user.messages]),
       io:format("client: ~s connected.~n", [Nick]),
       broadcast(join, Users, {Nick}),
-      User = #user{node = Node,pid = Pid ,nick = Nick, on = true, messages = []},
+
 
       %% SE ESTIVER JA NO BANCO, RECEBER AS MENSAGENS ARMAZENAS QUANDO OFFLINE E APAGAR AS MENSAGENS
 
@@ -43,7 +49,7 @@ chat(Users) ->
       %% {{Y,MON,D},{H,MIN,S}} = calendar:local_time(),
       M = #message{nick = User#user.nick,type = new_message, text = Message, date = erlang:system_time()},
       message_service:add_record(M),
-
+      UsersOff = user_service:getOff(),
       %% SE ESTIVER ON == FALSE, ARMAZENAR AS MENSAGENS !!!!!!!!!!
 
       chat(Users);
@@ -85,6 +91,11 @@ broadcast(Message, [ User | Users ]) ->
 broadcast(_, []) ->
   true.
 
+msToDate(Milliseconds) ->
+  BaseDate      = calendar:datetime_to_gregorian_seconds({{1970,1,1},{0,0,0}}),
+  Seconds       = BaseDate + (Milliseconds div 1000),
+  { Date,_Time} = calendar:gregorian_seconds_to_datetime(Seconds),
+  Date.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%

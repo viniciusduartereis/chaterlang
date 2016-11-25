@@ -31,3 +31,19 @@ select()->
       end,
   {atomic, Val} = mnesia:transaction(F),
   Val.
+
+get(U)->
+  F = fun() ->
+    Query = qlc:q([ X || X <- mnesia:table(user), X#user.nick =:= U#user.nick andalso X#user.node =:= U#user.node  ]),
+    qlc:e(Query)
+      end,
+  {atomic, Val} = mnesia:transaction(F),
+  Val.
+
+getOff()->
+  F = fun() ->
+    Query = qlc:q([ X || X <- mnesia:table(user), X#user.on =:= false ]),
+    qlc:e(Query)
+      end,
+  {atomic, Val} = mnesia:transaction(F),
+  Val.
