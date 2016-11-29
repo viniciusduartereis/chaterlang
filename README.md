@@ -53,7 +53,6 @@ To send message
 ## Authors
 
 * Vinícius Duarte Reis
-* Natalia Leticia
 
 ## Acknowledgments
 
