@@ -37,8 +37,7 @@ chat(Users) ->
       broadcast(join, Users, {Nick}),
 
 
-      %% SE ESTIVER JA NO BANCO, RECEBER AS MENSAGENS ARMAZENAS QUANDO OFFLINE E APAGAR AS MENSAGENS
-
+ 
       user_service:add_record(User),
       chat([User]++ Users);
 
@@ -50,7 +49,7 @@ chat(Users) ->
       M = #message{nick = User#user.nick,type = new_message, text = Message, date = erlang:system_time()},
       message_service:add_record(M),
       UsersOff = user_service:getOff(),
-      %% SE ESTIVER ON == FALSE, ARMAZENAR AS MENSAGENS !!!!!!!!!!
+
 
       chat(Users);
     {'EXIT', Pid, _} ->
@@ -97,22 +96,4 @@ msToDate(Milliseconds) ->
   { Date,_Time} = calendar:gregorian_seconds_to_datetime(Seconds),
   Date.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-%%	TCP SOCKET TEST
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 
-% start1() ->
-%   {ok, ServerSocket} = gen_tcp:listen(?PORT, ?TCP_OPTIONS),
-%   chat1(ServerSocket, []).
-% 
-% chat1(Server, Users) ->
-%   case gen_tcp:accept(Server) of
-%     {ok, Client} ->
-%       Client ! {join, Client},
-%       chat1(Server, Users ++ [Client] );
-%     _ ->
-%       io:format("\n")
-%   end.
 
